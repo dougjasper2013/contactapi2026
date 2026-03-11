@@ -37,6 +37,29 @@
                 exit;
         }
 
+        // Insert into database
+        $sql = "INSERT INTO `contacts`(`contactID`, `firstName`, `lastName`, `emailAddress`, `phoneNumber`, `status`, `dob`)
+            VALUES (null, '{$firstName}', '{$lastName}', '{$emailAddress}', '{$phoneNumber}', '{$status}', '{$dob}')";
+ 
+        if (mysqli_query($con, $sql)) {
+            http_response_code(201);
+            echo json_encode([
+                'data' => [
+                    'contactID' => mysqli_insert_id($con),
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'emailAddress' => $emailAddress,
+                    'phoneNumber' => $phoneNumber,
+                    'status' => $status,
+                    'dob' => $dob
+                ]
+            ]);
+        }
+        else {
+            http_response_code(422);
+            echo json_encode(['message' => 'Database insert failed.']);
+        }
+
         
     }
 

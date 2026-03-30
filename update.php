@@ -33,6 +33,22 @@
         }
 
     // Update contact
-    // To be covered next week.
+    $sql = " UPDATE contacts SET 
+        firstName = '$firstName',
+        lastName = '$lastName',
+        emailAddress = '$emailAddress',
+        phoneNumber = '$phoneNumber',
+        status = '$status',
+        dob = '$dob'
+        WHERE contactID = $contactID LIMIT 1";
+
+    if (mysqli_query($con, $sql)) {
+        http_response_code(200);
+        echo json_encode(['message' => 'Contact updated successfully.']);
+    }
+    else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database update failed.']);
+    }
 
 ?>

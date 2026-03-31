@@ -35,7 +35,14 @@
             $new = 'placeholder_100.jpg';
         }
 
-        
+        // Allowed image file extensions
+        $allowedExt = ['jpg', 'jpeg', 'png', 'gif'];
+        $ext = strtolower(pathinfo($new, PATHINFO_EXTENSION));
+        if ($new != 'placeholder_100.jpg' && !inarray($ext, $allowedExt)) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Invalid image format. Only JPG, PNG and GIF are allowed.']);
+            exit;
+        }
 
         // Check duplicate email
         $checkEmailSql = "SELECT 1 FROM contacts WHERE emailAddress = '{$emailAddress}'";
@@ -44,12 +51,23 @@
         if (mysqli_num_rows($checkEmailResult) > 0) {
             http_response_code(409);
             echo json_encode(['message' => 'Duplicate email address.']);
+            exit;
+        }
+
+        // Check duplicate image name
+        if ($new != 'placeholder_100.jpg') {
+            $checkImageSql = "SELECT 1 FROM contacts WHERE imageName = '{$new}'";
+            $checkImageResult = mysqli_query($con, $checkImageSql);
+            if(mysqli_num_rows($checkImageResult) > 0) {
+                http_response_code(409);
+                echo json_encode(['message' => 'Duplicate image name.']);
                 exit;
+            }
         }
 
         // Insert into database
-        $sql = "INSERT INTO `contacts`(`contactID`, `firstName`, `lastName`, `emailAddress`, `phoneNumber`, `status`, `dob`)
-            VALUES (null, '{$firstName}', '{$lastName}', '{$emailAddress}', '{$phoneNumber}', '{$status}', '{$dob}')";
+        $sql = "INSERT INTO `contacts`(`contactID`, `firstName`, `lastName`, `emailAddress`, `phoneNumber`, `status`, `dob`,`imageName`)
+            VALUES (null, '{$firstName}', '{$lastName}', '{$emailAddress}', '{$phoneNumber}', '{$status}', '{$dob}', '{$new}')";
  
         if (mysqli_query($con, $sql)) {
             http_response_code(201);
@@ -61,7 +79,8 @@
                     'emailAddress' => $emailAddress,
                     'phoneNumber' => $phoneNumber,
                     'status' => $status,
-                    'dob' => $dob
+                    'dob' => $dob,
+                    'imageName' => $new
                 ]
             ]);
         }

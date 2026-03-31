@@ -26,6 +26,16 @@
         $phoneNumber = mysqli_real_escape_string($con, trim($request->data->phoneNumber));
         $status = mysqli_real_escape_string($con, trim($request->data->status));
         $dob = mysqli_real_escape_string($con, trim($request->data->dob));
+        $imageName = mysqli_real_escape_string($con, trim($request->data->imageName));
+
+        // Extract filename
+        $origimg = str_replace('\\', '/', $imageName);
+        $new = basename($origimg);
+        if (empty($new)) {
+            $new = 'placeholder_100.jpg';
+        }
+
+        
 
         // Check duplicate email
         $checkEmailSql = "SELECT 1 FROM contacts WHERE emailAddress = '{$emailAddress}'";

@@ -3,7 +3,7 @@
 
     $contacts = [];
 
-    $sql = "SELECT contactID, firstName, lastName, emailAddress, phoneNumber, status, dob FROM contacts";
+    $sql = "SELECT contactID, firstName, lastName, emailAddress, phoneNumber, status, dob, imageName FROM contacts";
 
     if ($result = mysqli_query($con, $sql))
     {
@@ -18,6 +18,7 @@
             $contacts[$count]['phoneNumber'] = $row['phoneNumber'];
             $contacts[$count]['status'] = $row['status'];
             $contacts[$count]['dob'] = $row['dob'];
+            $contacts[$count]['imageName'] = $row['imageName'];
 
             $count++;
         }

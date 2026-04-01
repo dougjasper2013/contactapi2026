@@ -38,7 +38,7 @@
         // Allowed image file extensions
         $allowedExt = ['jpg', 'jpeg', 'png', 'gif'];
         $ext = strtolower(pathinfo($new, PATHINFO_EXTENSION));
-        if ($new != 'placeholder_100.jpg' && !inarray($ext, $allowedExt)) {
+        if ($new != 'placeholder_100.jpg' && !in_array($ext, $allowedExt)) {
             http_response_code(400);
             echo json_encode(['message' => 'Invalid image format. Only JPG, PNG and GIF are allowed.']);
             exit;

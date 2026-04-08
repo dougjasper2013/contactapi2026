@@ -41,14 +41,14 @@ if ($result && mysqli_num_rows($result) === 1) {
     // ✅ Verify password
     if (password_verify($password, $user['password'])) {
         // Reset failed attempts on success
-        $update = "UPDATE registrations SET failed_attempts = 0, last_failed_login = NULL WHERE registrationID = {$user['registrationID']}";
+        $update = "UPDATE registrations SET failed_attempts = 0, last_failed_login = NULL WHERE userID = {$user['userID']}";
         mysqli_query($con, $update);
 
         echo json_encode(['success' => true, 'message' => 'Login successful']);
     } else {
         // ❌ Increment failed attempts
         $failedAttempts++;
-        $update = "UPDATE registrations SET failed_attempts = $failedAttempts, last_failed_login = NOW() WHERE registrationID = {$user['registrationID']}";
+        $update = "UPDATE registrations SET failed_attempts = $failedAttempts, last_failed_login = NOW() WHERE userID = {$user['userID']}";
         mysqli_query($con, $update);
 
         // 🔹 Calculate remaining attempts before lockout
